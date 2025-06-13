@@ -5,6 +5,17 @@
   "author": "Sebastian Iwanczyszyn",
   "private": false,
   "license": "MIT",
+  "main": "lib/index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/nestjstools/clock/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nestjstools/clock"
+  },
   "keywords": [
     "nestjs",
     "nestjs-clock",
