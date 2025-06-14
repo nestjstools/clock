@@ -126,6 +126,62 @@ describe('AppController (e2e)', () => {
 });
 ```
 
+---
+
+## CalendarDate Value Object
+
+**CalendarDate** is a simple and immutable value object representing a calendar date without time or timezone information, storing only the year, month, and day. It ensures valid date creation and provides convenient methods for manipulation and comparison.
+
+* Immutable representation of a date in `YYYY-MM-DD` format.
+* Creation from string (`YYYY-MM-DD`) or native `Date` objects.
+* Validation to prevent invalid dates.
+* Comparison methods (`equals`, `isBefore`, `isAfter`, etc.).
+* Methods to add or subtract days safely.
+* Conversion back to native `Date` objects (with time zeroed).
+* Useful for date-only domain logic where time is irrelevant.
+
+### Usage as value object
+
+```ts
+import { CalendarDate } from '../value-object/calendar-date';
+
+// Create from string
+const date1 = CalendarDate.fromString('2025-06-14');
+
+// Create from native Date
+const date2 = CalendarDate.fromDate(new Date());
+
+// Get today's date as CalendarDate
+const today = CalendarDate.today();
+
+// Manipulate dates
+const nextWeek = today.addDays(7);
+const yesterday = today.subtractDays(1);
+
+// Compare dates
+if (date1.isBefore(nextWeek)) {
+  console.log(`${date1.toString()} is before ${nextWeek.toString()}`);
+}
+
+// Convert back to native Date
+const nativeDate = date1.toDate();
+```
+### In NestJS Dependency Injection
+```ts
+import { Injectable } from '@nestjs/common';
+import { IClock, Clock } from '@nestjstools/clock';
+
+@Injectable()
+export class ReturnToday {
+  constructor(@Clock() private readonly clock: IClock) {}
+
+  todayIs(): string {
+    const today = this.clock.today();
+    return today.toString(); // output in format YYYY-MM-DD
+  }
+}
+```
+
 ## Benefits
 
 * Avoid scattered use of `new Date()` in your business logic
