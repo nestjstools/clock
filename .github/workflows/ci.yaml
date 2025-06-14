@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - "main"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 23
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm i --dev
+
+      - name: Run Tests
+        env:
+          NODE_ENV: test
+        run: npm run test
+
+      - name: Build the package
+        env:
+          NODE_ENV: production
+        run: npm run build
