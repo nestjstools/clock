@@ -61,28 +61,32 @@ You can easily register the clock as a provider in your modules:
 
 ```ts
 import { Module } from '@nestjs/common';
-import { SystemClock, IClock } from '@nestjstools/clock';
+import { ClockModule } from '@nestjstools/clock';
 
 @Module({
   imports: [
-    ClockModule.forRoot(), //By default global
+    ClockModule.forRoot(), //By default global - .forFeature() also available
   ]
 })
-export class ClockModule {}
+export class AppModule {}
 ```
 
-Inject the clock into your services:
+Inject the clock into your services (example):
 
 ```ts
-import { Injectable, Inject } from '@nestjs/common';
-import { IClock } from '@nestjstools/clock';
+import { Injectable } from '@nestjs/common';
+import { IClock, Clock } from '@nestjstools/clock';
 
 @Injectable()
-export class MyService {
+export class SubscriptionService {
   constructor(@Clock() private readonly clock: IClock) {}
 
-  getCurrentTime(): Date {
-    return this.clock.now();
+  isSubscriptionActive(startDate: Date, durationDays: number): boolean {
+    const now = this.clock.now();
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + durationDays);
+
+    return now < endDate;
   }
 }
 ```
@@ -122,9 +126,9 @@ describe('AppController (e2e)', () => {
 });
 ```
 
-## Why Use This Library?
+## Benefits
 
-* 🚫 Avoid scattered use of `new Date()` in your business logic
-* 📦 Lightweight and dependency-free
-* ⚙️ Improve the testability and maintainability of your time-dependent logic
-* 🧩 Fits well in clean architecture and DDD practices
+* Avoid scattered use of `new Date()` in your business logic
+* Lightweight and dependency-free
+* Improve the testability and maintainability of your time-dependent logic
+* Fits well in clean architecture and DDD practices
