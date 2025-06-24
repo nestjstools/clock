@@ -4,8 +4,6 @@
 
 # @nestjstools/clock
 
-> ⏰ A minimal, flexible, and testable time abstraction layer for NestJS.
-
 ## Introduction
 
 In most applications, time plays a crucial role-whether it's timestamps, expiration checks, scheduling, or logging. However, directly calling `new Date()` throughout your code can make testing difficult and introduce unpredictable behavior in your services.
