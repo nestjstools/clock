@@ -94,32 +94,38 @@ export class SubscriptionService {
 Swap out the system clock with a fixed one in your test setup:
 
 ```ts
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { Test } from '@nestjs/testing';
+import { SubscriptionService } from './subscription.service';
 import { FixedClock, Service } from '@nestjstools/clock';
 
-describe('AppController (e2e)', () => {
-  let app: INestApplication;
+describe('SubscriptionService', () => {
+  let service: SubscriptionService;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+    const moduleRef = await Test.createTestingModule({
+      providers: [
+        SubscriptionService,
+      ],
     })
-      .overrideProvider(Service.CLOCK_SERVICE) // or .overrideProvider('CLOCK_SERVICE')
-      .useValue(new FixedClock(new Date('2020-10-10'))) // now the Date returned by .now() will be static
+      .overrideProvider(Service.CLOCK_SERVICE)
+      .useValue(new FixedClock(new Date('2020-10-10T00:00:00Z')))
       .compile();
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    service = moduleRef.get(SubscriptionService);
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+  it('returns true when subscription is still active', () => {
+    const start = new Date('2020-10-01T00:00:00Z');
+    const active = service.isSubscriptionActive(start, 20); // expires 2020-10-21
+
+    expect(active).toBe(true);
+  });
+
+  it('returns false when subscription has expired', () => {
+    const start = new Date('2020-09-01T00:00:00Z');
+    const active = service.isSubscriptionActive(start, 20); // expires 2020-09-21
+
+    expect(active).toBe(false);
   });
 });
 ```
