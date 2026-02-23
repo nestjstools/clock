@@ -1,23 +1,39 @@
 <p align="center">
-    <image src="nestjstools-logo.png" width="400">
+    <image src="nestjstools-logo.png" width="400" alt="NestJSTools Logo" />
 </p>
 
-# @nestjstools/clock
+# NestJS Clock – Time Abstraction & Date Provider for Testable Applications
 
 ## Introduction
 
-In most applications, time plays a crucial role-whether it's timestamps, expiration checks, scheduling, or logging. However, directly calling `new Date()` throughout your code can make testing difficult and introduce unpredictable behavior in your services.
+In many NestJS applications, time handling is critical - whether it's timestamps, expiration checks, scheduling, domain logic, or logging.
 
-`@nestjstools/clock` provides a clean abstraction over system time using the `IClock` interface. It enables dependency injection of time providers (`SystemClock`, `FixedClock`) in your NestJS app, improving testability, readability, and flexibility.
+Calling `new Date()` directly throughout your code makes unit testing difficult and tightly couples your business logic to system time.
 
-This utility is especially useful in domain-driven design and hexagonal architecture, where you want infrastructure concerns (like the system clock) abstracted from your core business logic.
+`@nestjstools/clock` is a lightweight **NestJS time abstraction library** that provides a clean `IClock` interface for injecting time providers via dependency injection.
+
+It enables:
+
+- Deterministic testing with a fixed clock
+- Clean separation of infrastructure concerns
+- Better testability and maintainability
+
+This library is ideal for **clean architecture, hexagonal architecture, and time-dependent domain logic in NestJS applications.**
+
+## Documentation
+
+* https://docs.nestjstools.com/clock
+* https://nestjstools.com
 
 ## Features
 
-- **Abstraction of time handling** via the `IClock` interface.
-- **Swappable implementations**: `SystemClock` for real-time usage, `FixedClock` for predictable testing.
-- **Perfect for unit testing** with consistent and controlled time behavior.
-- **Seamless NestJS integration** via dependency injection.
+- Abstraction of time handling via the `IClock` interface
+- Swappable implementations: `SystemClock` (real time) and `FixedClock` (test time)
+- Perfect for mocking time in NestJS unit tests
+- Seamless integration with NestJS dependency injection
+- Clean separation between domain logic and system time
+- Includes `CalendarDate` value object for date-only domain modeling
+- Lightweight and dependency-free
 
 ## Installation
 
@@ -192,3 +208,8 @@ export class ReturnToday {
 * Lightweight and dependency-free
 * Improve the testability and maintainability of your time-dependent logic
 * Fits well in clean architecture and DDD practices
+
+## Keywords
+
+nestjs clock, nestjs time provider, nestjs mock date, nestjs test time,
+nestjs calendar date, typescript date value object, clean architecture time abstraction

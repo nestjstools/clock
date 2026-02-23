@@ -1,6 +1,6 @@
 {
   "name": "@nestjstools/clock",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A lightweight, test-friendly clock abstraction for NestJS apps enabling flexible time management via dependency injection",
   "author": "Sebastian Iwanczyszyn",
   "private": false,
@@ -18,17 +18,15 @@
   },
   "keywords": [
     "nestjs",
-    "nestjs-clock",
-    "clock",
-    "time",
-    "dependency-injection",
-    "testable",
-    "mock",
-    "fixed-clock",
-    "system-clock",
-    "datetime",
-    "timer",
-    "testing"
+    "nestjstools clock",
+    "nestjs clock",
+    "nestjs time abstraction",
+    "nestjs date provider",
+    "nestjs mock date",
+    "nestjs unit testing",
+    "nestjs dependency injection",
+    "calendar date typescript",
+    "time abstraction typescript"
   ],
   "files": [
     "lib",
