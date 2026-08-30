@@ -1,3 +1,5 @@
+import { Temporal } from '@js-temporal/polyfill';
+
 export class CalendarDate {
   private readonly year: number;
   private readonly month: number;
@@ -20,8 +22,10 @@ export class CalendarDate {
     return new CalendarDate(year, month, day);
   }
 
-  static today(): CalendarDate {
-    return CalendarDate.fromDate(new Date());
+  static today(
+    timeZone: Temporal.TimeZoneLike = Temporal.Now.timeZoneId(),
+  ): CalendarDate {
+    return CalendarDate.fromTemporal(Temporal.Now.plainDateISO(timeZone));
   }
 
   static fromDate(date: Date): CalendarDate {
@@ -29,6 +33,10 @@ export class CalendarDate {
     const month = date.getMonth() + 1;
     const day = date.getDate();
     return new CalendarDate(year, month, day);
+  }
+
+  static fromTemporal(date: Temporal.PlainDate): CalendarDate {
+    return new CalendarDate(date.year, date.month, date.day);
   }
 
   static isValidDate(year: number, month: number, day: number): boolean {
@@ -70,30 +78,38 @@ export class CalendarDate {
     return new Date(this.year, this.month - 1, this.day);
   }
 
+  toTemporal(): Temporal.PlainDate {
+    return Temporal.PlainDate.from({
+      year: this.year,
+      month: this.month,
+      day: this.day,
+    });
+  }
+
   addDays(days: number): CalendarDate {
     if (days < 0) {
       throw new Error('days must be a positive number');
     }
-    const date = this.toDate();
-    date.setDate(date.getDate() + days);
-    return CalendarDate.fromDate(date);
+    return CalendarDate.fromTemporal(this.toTemporal().add({ days }));
   }
 
   subtractDays(days: number): CalendarDate {
     if (days < 0) {
       throw new Error('days must be a positive number');
     }
-    const date = this.toDate();
-    date.setDate(date.getDate() - days);
-    return CalendarDate.fromDate(date);
+    return CalendarDate.fromTemporal(this.toTemporal().subtract({ days }));
   }
 
   isBefore(other: CalendarDate): boolean {
-    return this.toDate() < other.toDate();
+    return (
+      Temporal.PlainDate.compare(this.toTemporal(), other.toTemporal()) < 0
+    );
   }
 
   isAfter(other: CalendarDate): boolean {
-    return this.toDate() > other.toDate();
+    return (
+      Temporal.PlainDate.compare(this.toTemporal(), other.toTemporal()) > 0
+    );
   }
 
   isSameOrBefore(other: CalendarDate): boolean {

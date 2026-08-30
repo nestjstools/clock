@@ -1,4 +1,5 @@
 import { CalendarDate } from '../../../src/value-object/calendar-date';
+import { Temporal } from '@js-temporal/polyfill';
 
 describe('CalendarDate', () => {
   it('creates instance from valid string', () => {
@@ -15,7 +16,14 @@ describe('CalendarDate', () => {
     expect(calendarDate.toString()).toBe('2025-06-14');
   });
 
-  it('today() returns today\'s date', () => {
+  it('converts to and from Temporal.PlainDate', () => {
+    const temporalDate = Temporal.PlainDate.from('2025-06-14');
+    const calendarDate = CalendarDate.fromTemporal(temporalDate);
+
+    expect(calendarDate.toTemporal().equals(temporalDate)).toBe(true);
+  });
+
+  it("today() returns today's date", () => {
     const today = new Date();
     const calendarToday = CalendarDate.today();
     expect(calendarToday.getYear()).toBe(today.getFullYear());
@@ -43,13 +51,19 @@ describe('CalendarDate', () => {
     expect(() => CalendarDate.fromString('2025-02-30')).toThrow('Invalid date');
     expect(() => CalendarDate.fromString('2025-13-01')).toThrow('Invalid date');
     expect(() => CalendarDate.fromString('2025-00-10')).toThrow('Invalid date');
-    expect(() => CalendarDate.fromString('invalid-string')).toThrow('Invalid date');
+    expect(() => CalendarDate.fromString('invalid-string')).toThrow(
+      'Invalid date',
+    );
     expect(() => CalendarDate.fromString('2025-6-5')).toThrow('Invalid date');
   });
 
   it('throws if addDays receives negative', () => {
-    expect(() => CalendarDate.fromString('2025-12-01').addDays(-1)).toThrow('days must be a positive number');
-    expect(() => CalendarDate.fromString('2025-12-01').subtractDays(-1)).toThrow('days must be a positive number');
+    expect(() => CalendarDate.fromString('2025-12-01').addDays(-1)).toThrow(
+      'days must be a positive number',
+    );
+    expect(() =>
+      CalendarDate.fromString('2025-12-01').subtractDays(-1),
+    ).toThrow('days must be a positive number');
   });
 
   it('addDays and subtractDays work correctly', () => {
