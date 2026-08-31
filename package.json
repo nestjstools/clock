@@ -1,12 +1,13 @@
 {
   "name": "@nestjstools/clock",
-  "version": "2.0.0",
+  "version": "2.0.0-beta.0",
   "description": "A lightweight, test-friendly clock abstraction for NestJS apps enabling flexible time management via dependency injection",
   "author": "Sebastian Iwanczyszyn",
   "license": "MIT",
   "main": "lib/index.js",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "tag": "beta"
   },
   "bugs": {
     "url": "https://github.com/nestjstools/clock/issues"
