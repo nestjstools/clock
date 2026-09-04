@@ -5,7 +5,7 @@ import { Clock } from './service/i-clock';
 const clockProviders: Provider[] = [
   {
     provide: Clock,
-    useExisting: SystemClock,
+    useClass: SystemClock,
   },
   SystemClock,
 ];
