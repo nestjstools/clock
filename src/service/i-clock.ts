@@ -5,3 +5,9 @@ export interface IClock {
 
   today(): CalendarDate;
 }
+
+export abstract class Clock implements IClock{
+  abstract now(): Date;
+
+  abstract today(): CalendarDate;
+}

@@ -10,7 +10,7 @@ In many NestJS applications, time handling is critical - whether it's timestamps
 
 Calling `new Date()` directly throughout your code makes unit testing difficult and tightly couples your business logic to system time.
 
-`@nestjstools/clock` is a lightweight **NestJS time abstraction library** that provides a clean `IClock` interface for injecting time providers via dependency injection.
+`@nestjstools/clock` is a lightweight **NestJS time abstraction library**. Import `Clock` as both the abstraction and NestJS injection token—no custom decorator or string/symbol token is needed.
 
 It enables:
 
@@ -27,7 +27,7 @@ This library is ideal for **clean architecture, hexagonal architecture, and time
 
 ## Features
 
-- Abstraction of time handling via the `IClock` interface
+- A single `Clock` abstraction that is also the NestJS injection token
 - Swappable implementations: `SystemClock` (real time) and `FixedClock` (test time)
 - Perfect for mocking time in NestJS unit tests
 - Seamless integration with NestJS dependency injection
@@ -41,6 +41,12 @@ This library is ideal for **clean architecture, hexagonal architecture, and time
 npm install @nestjstools/clock
 #or
 yarn add @nestjstools/clock
+```
+
+To try the current 2.0 beta:
+
+```bash
+npm install @nestjstools/clock@beta
 ```
 
 ## Usage
@@ -89,11 +95,11 @@ Inject the clock into your services (example):
 
 ```ts
 import { Injectable } from '@nestjs/common';
-import { IClock, Clock } from '@nestjstools/clock';
+import { Clock } from '@nestjstools/clock';
 
 @Injectable()
 export class SubscriptionService {
-  constructor(@Clock() private readonly clock: IClock) {}
+  constructor(private readonly clock: Clock) {}
 
   isSubscriptionActive(startDate: Date, durationDays: number): boolean {
     const now = this.clock.now();
@@ -112,7 +118,7 @@ Swap out the system clock with a fixed one in your test setup:
 ```ts
 import { Test } from '@nestjs/testing';
 import { SubscriptionService } from './subscription.service';
-import { FixedClock, Service } from '@nestjstools/clock';
+import { Clock, FixedClock } from '@nestjstools/clock';
 
 describe('SubscriptionService', () => {
   let service: SubscriptionService;
@@ -123,7 +129,7 @@ describe('SubscriptionService', () => {
         SubscriptionService,
       ],
     })
-      .overrideProvider(Service.CLOCK_SERVICE)
+      .overrideProvider(Clock)
       .useValue(new FixedClock(new Date('2020-10-10T00:00:00Z')))
       .compile();
 
@@ -163,7 +169,7 @@ describe('SubscriptionService', () => {
 ### Usage as value object
 
 ```ts
-import { CalendarDate } from '../value-object/calendar-date';
+import { CalendarDate } from '@nestjstools/clock';
 
 // Create from string
 const date1 = CalendarDate.fromString('2025-06-14');
@@ -189,11 +195,11 @@ const nativeDate = date1.toDate();
 ### In NestJS Dependency Injection
 ```ts
 import { Injectable } from '@nestjs/common';
-import { IClock, Clock } from '@nestjstools/clock';
+import { Clock } from '@nestjstools/clock';
 
 @Injectable()
 export class ReturnToday {
-  constructor(@Clock() private readonly clock: IClock) {}
+  constructor(private readonly clock: Clock) {}
 
   todayIs(): string {
     const today = this.clock.today();

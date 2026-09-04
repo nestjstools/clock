@@ -1,11 +1,11 @@
 import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { SystemClock } from './service/system-clock';
-import { Service } from './dependency-injection/service'; // Consider renaming this
+import { Clock } from './service/i-clock';
 
 const clockProviders: Provider[] = [
   {
-    provide: Service.CLOCK_SERVICE,
-    useClass: SystemClock,
+    provide: Clock,
+    useExisting: SystemClock,
   },
   SystemClock,
 ];
