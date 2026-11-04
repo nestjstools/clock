@@ -43,12 +43,6 @@ npm install @nestjstools/clock
 yarn add @nestjstools/clock
 ```
 
-To try the current 2.0 beta:
-
-```bash
-npm install @nestjstools/clock@beta
-```
-
 ## Usage
 
 ### SystemClock
@@ -118,13 +112,14 @@ Swap out the system clock with a fixed one in your test setup:
 ```ts
 import { Test } from '@nestjs/testing';
 import { SubscriptionService } from './subscription.service';
-import { Clock, FixedClock } from '@nestjstools/clock';
+import { Clock, ClockModule, FixedClock } from '@nestjstools/clock';
 
 describe('SubscriptionService', () => {
   let service: SubscriptionService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
+      imports: [ClockModule.forRoot()],
       providers: [
         SubscriptionService,
       ],
