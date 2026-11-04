@@ -1,8 +1,9 @@
-import { IClock } from './i-clock';
+import { Clock } from './i-clock';
 import { CalendarDate } from '../value-object/calendar-date';
 
-export class FixedClock implements IClock {
+export class FixedClock extends Clock {
   constructor(private readonly date: Date) {
+    super();
   }
 
   now(): Date {

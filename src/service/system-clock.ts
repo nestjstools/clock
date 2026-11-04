@@ -1,7 +1,7 @@
-import { IClock } from './i-clock';
+import { Clock } from './i-clock';
 import { CalendarDate } from '../value-object/calendar-date';
 
-export class SystemClock implements IClock {
+export class SystemClock extends Clock {
   now(): Date {
     return new Date();
   }
